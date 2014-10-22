@@ -7,17 +7,17 @@ segImgsPath = options.segImgsDir;
 imgsListFpath = options.imgsList;
 
 %% Get imgs list
-if ~imgsListFpath || ~exist(imgsListFpath, 'file')
+if isempty(imgsListFpath) || ~exist(imgsListFpath, 'file')
     frpaths = getImgFilesList(imgsDir);
 else
-    fid = fopen(p.Results.imgsListFpath, 'r');
+    fid = fopen(imgsListFpath, 'r');
     frpaths = textscan(fid, '%s', 'Delimiter', '\n');
     frpaths = frpaths{:};
     fclose(fid);
 end
 
 fullpaths = cellfun(@(x) fullfile(imgsDir, x), frpaths, 'UniformOutput', false);
-if segImgsPath && exist(segImgsPath, 'dir')
+if ~isempty(segImgsPath) && exist(segImgsPath, 'dir')
     segDir = segImgsPath;
     fprintf('Will use segment information from %s\n', segDir);
     fprintf('Takes the black region features only\n');
@@ -35,13 +35,13 @@ for i = 1 : numel(fullpaths)
     [path, fname, ~] = fileparts(frpaths{i});
 
     try
-        segImg = imread(fullfile(segDir, path, [fname, segExt]);
+        segMap = imread(fullfile(segDir, path, [fname, options.segExt]));
         feature = computeFeatureRep(I, options, 'segMap', segMap);
     catch
         feature = computeFeatureRep(I, options);
     end
 
-    features_dpath = fullfile(options.cacheDir, options.featuresDir, ...
+    features_dpath = fullfile(options.cacheDir, options.featureDir, ...
             path);
     system(['mkdir -p ' features_dpath]);
     save(fullfile(features_dpath, [fname, '.mat']), 'feature');
