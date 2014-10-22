@@ -14,6 +14,7 @@ function model = computeVocab(imgsDir, params, varargin)
 p = inputParser;
 addOptional(p, 'imgsListFpath', 0); % dir with all the images
 addOptional(p, 'segImgsPath', 0); % directory with segmentation images
+addOptional(p, 'alpha', 10000); % number of descriptors to sample from each image
 parse(p, varargin{:});
 
 %% Get imgs list
@@ -53,6 +54,9 @@ for i = 1 : numel(fullpaths)
         fprintf(2, 'Unable to read %s\n', fullpaths{i});
         continue;
     end
+    if size(I, 3) ~= 3
+        continue;
+    end
     feature = dsift(I);
     feature_reshaped = reshape(feature, size(feature, 1) * size(feature, 2), ...
             [], 1);
@@ -69,6 +73,8 @@ for i = 1 : numel(fullpaths)
         catch
         end
     end
+    feature_reshaped = feature_reshaped(randperm(size(feature_reshaped, 1), ...
+                min(p.Results.alpha, size(feature_reshaped, 1))), :);
     all_features = [all_features; feature_reshaped];
     fprintf('Read %d features from %s\n', size(feature_reshaped, 1), frpaths{i});
 end
