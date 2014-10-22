@@ -1,4 +1,4 @@
-function feature = dumpFeatureRep(options)
+function dumpFeatureRep(options)
 % DUMPFEATUREREP reads all images in the directory, clips using the segmentation
 % images and dumps the feature representation in cache
 
@@ -23,7 +23,6 @@ if ~isempty(segImgsPath) && exist(segImgsPath, 'dir')
     fprintf('Takes the black region features only\n');
 end
 
-all_features = [];
 for i = 1 : numel(fullpaths)
     try
         I = imread(fullpaths{i});
@@ -45,7 +44,14 @@ for i = 1 : numel(fullpaths)
             path);
     system(['mkdir -p ' features_dpath]);
     save(fullfile(features_dpath, [fname, '.mat']), 'feature');
+    if options.dumpFeatureVis == 1
+        out_dir = fullfile(features_dpath, 'Vis/');
+        if ~exist(out_dir, 'dir')
+            system(['mkdir -p ' out_dir]);
+        end
+        out_fpath = fullfile(out_dir, [fname, '.jpg']);
+        saveFeatureVisualization(I, feature, out_fpath, options);
+    end
     fprintf('Done for %s (%d/%d)\n', frpaths{i}, i, numel(frpaths));
 end
-
 

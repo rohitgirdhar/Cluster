@@ -10,3 +10,6 @@ options.segImgsDir = '~/projects/003_SelfieSeg/subdiscover/ResultsR/fullbody/gym
 options.clusterFeature = 'color-hist'; % could be 'dsift', 'color-hist'
 options.featureDir = '/features_colhist'; % directory in cache to store the feature reps
 options.segExt = '.png'; % extensions of segmentation files
+options.K = 60; % num clusters
+options.dumpFeatureVis = 1;
+

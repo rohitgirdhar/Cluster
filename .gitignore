@@ -1,3 +1,4 @@
 tags
 *.swp
 *~
+src/startup.m

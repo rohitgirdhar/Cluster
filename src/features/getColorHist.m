@@ -18,3 +18,8 @@ segMap_re = reshape(p.Results.segMap, size(I, 1) * size(I, 2), []);
 I_re_sel = I_re(segMap_re == 1, :);
 colhist = reshape(histc(I_re_sel, 1 : 256), 1, []);
 
+% if size less than 768 - eg grayscale images, simply repeat the hist
+if size(colhist, 2) == 256
+    colhist = repmat(colhist, 1, 3);
+end
+
