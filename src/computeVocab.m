@@ -80,11 +80,11 @@ for i = 1 : numel(fullpaths)
 end
 
 fprintf('Found %d descriptors. Clustering now...\n', size(all_features, 1));
-
+save('all_features.mat', 'all_features', '-v7.3');
 %% K Means cluster the SIFTs, and create a model
 model.vocabSize = params.numWords;
-model.vocab = vl_kmeans(double(descs), ...
-                        min(size(descs, 2), params.numWords), 'verbose', ...
+model.vocab = vl_kmeans(double(all_features'), ...
+                        min(size(all_features, 1), params.numWords), 'verbose', ...
                         'algorithm', 'ANN');
 model.kdtree = vl_kdtreebuild(model.vocab);
 save('model.mat', 'model');
