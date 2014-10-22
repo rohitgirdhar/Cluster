@@ -45,6 +45,7 @@ for i = 1 : numel(fullpaths)
             path);
     system(['mkdir -p ' features_dpath]);
     save(fullfile(features_dpath, [fname, '.mat']), 'feature');
+    fprintf('Done for %s (%d/%d)\n', frpaths{i}, i, numel(frpaths));
 end
 
 

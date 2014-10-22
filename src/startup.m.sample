@@ -8,5 +8,5 @@ options.cacheDir = fullfile('../CacheR', options.datasetID);
 options.resultsDir = fullfile('../ResultsR', options.datasetID);
 options.segImgsDir = '~/projects/003_SelfieSeg/subdiscover/ResultsR/fullbody/gym_1';
 options.clusterFeature = 'color-hist'; % could be 'dsift', 'color-hist'
-options.featureDir = '/features'; % directory in cache to store the feature reps
+options.featureDir = '/features_colhist'; % directory in cache to store the feature reps
 options.segExt = '.png'; % extensions of segmentation files
