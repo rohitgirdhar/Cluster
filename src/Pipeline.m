@@ -1,5 +1,6 @@
-
-params.numWords = 20000;
+addpath(genpath('.'));
+run('~/software/vlfeat/toolbox/vl_setup.m');
+params.numWords = 10000;
 params.maxImgsForVocab = 100000; % inf
 vocab = computeVocab('~/projects/003_SelfieSeg/datasets/selfies_fullbody/fullbody/gym', ...
         params, ...

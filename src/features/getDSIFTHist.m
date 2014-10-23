@@ -15,8 +15,6 @@ vis = uint64(vl_kdtreequery(model.kdtree, model.vocab, ...
 vis_final = zeros(size(I, 1) * size(I, 2), 1);
 vis_final(find(seg_rowed), :) = vis;
 vis = reshape(vis_final, size(I, 1), size(I, 2));
-'here'
-%vis(p.Results.segMap) = 0;
 hist = histc(vis(:), 1 : options.dsiftVocabK);
 hist = reshape(hist, 1, []);
 hist = hist ./ norm(hist, 1);

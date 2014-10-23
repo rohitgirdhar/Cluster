@@ -11,10 +11,11 @@ function model = computeVocab(imgsDir, params, varargin)
 % params.numWords = size of voacbulary to learn
 % params.maxImgsForVocab = max number of images to use for computing it
 
+addpath(genpath('.'));
 p = inputParser;
 addOptional(p, 'imgsListFpath', 0); % dir with all the images
 addOptional(p, 'segImgsPath', 0); % directory with segmentation images
-addOptional(p, 'alpha', 10000); % number of descriptors to sample from each image
+addOptional(p, 'alpha', 1000); % number of descriptors to sample from each image
 parse(p, varargin{:});
 
 %% Get imgs list
@@ -87,5 +88,5 @@ model.vocab = vl_kmeans(double(all_features'), ...
                         min(size(all_features, 1), params.numWords), 'verbose', ...
                         'algorithm', 'ANN');
 model.kdtree = vl_kdtreebuild(model.vocab);
-save('model.mat', 'model');
+save(['model_' num2str(params.numWords) '.mat'], 'model');
 
