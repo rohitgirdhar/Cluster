@@ -23,6 +23,6 @@ if size(colhist, 2) == 256
     colhist = repmat(colhist, 1, 3);
 end
 
-% L2 normalize
-colhist = colhist ./ norm(colhist);
+% L1 normalize
+colhist = colhist ./ max(norm(colhist, 1), 1);
 

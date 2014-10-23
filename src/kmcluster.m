@@ -1,4 +1,4 @@
-function kmcluster(options)
+function [C, A] = kmcluster(options)
 
 imgsDir = options.dataset;
 segImgsPath = options.segImgsDir;
@@ -23,7 +23,14 @@ for i = 1 : numel(frpaths)
 end
 fprintf('Read all features (%d)\n', size(all_features, 1));
 
-[C, A] = vl_kmeans(all_features', options.K);
+%[C, A] = vl_kmeans(all_features', options.K, 'Verbose', 'Algorithm', 'ANN');
+[A, C] = kmeans(all_features, options.K);
 system(['mkdir -p ' options.resultsDir]);
 save(fullfile(options.resultsDir, ['kmeans_' num2str(options.K) '.mat']), 'C', 'A');
 
+fid = fopen(fullfile(options.resultsDir, ['kmeans_' num2str(options.K) '.txt']), 'w');
+for cls = unique(A(:))'
+    selected = frpaths(A == cls);
+    fprintf(fid, '%s\n', strjoin(selected', ' '));
+end
+fclose(fid);
