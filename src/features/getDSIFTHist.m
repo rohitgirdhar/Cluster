@@ -11,7 +11,7 @@ dsift_img = dsift(I);
 dsift_rowed = reshape(dsift_img, size(I, 1) * size(I, 2), [], 1);
 seg_rowed = reshape(p.Results.segMap, [], 1);
 tic;
-vis = uint64(vl_kdtreequery(model.kdtree, model.vocab, ...
+vis = uint32(vl_kdtreequery(model.kdtree, model.vocab, ...
             double(dsift_rowed(seg_rowed, :)')));
 vis_final = zeros(size(I, 1) * size(I, 2), 1);
 vis_final(find(seg_rowed), :) = vis;
