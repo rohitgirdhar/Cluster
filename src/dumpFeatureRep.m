@@ -45,7 +45,8 @@ for i = 1 : numel(fullpaths)
     system(['mkdir -p ' features_dpath]);
     save(fullfile(features_dpath, [fname, '.mat']), 'feature');
     if options.dumpFeatureVis == 1
-        out_dir = fullfile(features_dpath, 'Vis/');
+        features_vis_dpath = strrep(features_dpath, options.cacheDir, options.resultsDir);
+        out_dir = fullfile(features_vis_dpath, 'Vis/');
         if ~exist(out_dir, 'dir')
             system(['mkdir -p ' out_dir]);
         end
