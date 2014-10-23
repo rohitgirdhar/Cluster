@@ -1,4 +1,4 @@
-function feature = computeFeatureRep(I, options, varargin)
+function [feature, vis] = computeFeatureRep(I, options, varargin)
 % I a mxnx3 image
 % segMap a mxn binary segmentaion map
 
@@ -14,8 +14,9 @@ end
 feature = [];
 if strcmp(options.clusterFeature, 'color-hist')
     feature = getColorHist(I, 'segMap', p.Results.segMap);
+    vis = [];
 elseif strcmp(options.clusterFeature, 'dsift')
-    feature = dsift(I); % TODO: this would require post processing
+    [feature, vis] = getDSIFTHist(I, options, 'segMap', p.Results.segMap);
 else
     fprintf(2, 'Not implemented yet!\n');
 end

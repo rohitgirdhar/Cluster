@@ -35,9 +35,9 @@ for i = 1 : numel(fullpaths)
 
     try
         segMap = imread(fullfile(segDir, path, [fname, options.segExt]));
-        feature = computeFeatureRep(I, options, 'segMap', segMap);
+        [feature, featVis] = computeFeatureRep(I, options, 'segMap', segMap);
     catch
-        feature = computeFeatureRep(I, options);
+        [feature, featVis] = computeFeatureRep(I, options);
     end
 
     features_dpath = fullfile(options.cacheDir, options.featureDir, ...
@@ -51,7 +51,7 @@ for i = 1 : numel(fullpaths)
             system(['mkdir -p ' out_dir]);
         end
         out_fpath = fullfile(out_dir, [fname, '.jpg']);
-        saveFeatureVisualization(I, feature, out_fpath, options);
+        saveFeatureVisualization(I, feature, featVis, out_fpath, options);
     end
     fprintf('Done for %s (%d/%d)\n', frpaths{i}, i, numel(frpaths));
 end

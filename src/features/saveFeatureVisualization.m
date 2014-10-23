@@ -1,4 +1,4 @@
-function saveFeatureVisualization(I, feature, out_fpath, options)
+function saveFeatureVisualization(I, feature, featVis, out_fpath, options)
 
 if strcmp(options.clusterFeature, 'color-hist')
     figure('Visible', 'off');
