@@ -35,7 +35,8 @@ for i = 1 : numel(fullpaths)
 
     try
         segMap = imread(fullfile(segDir, path, [fname, options.segExt]));
-        [feature, featVis] = computeFeatureRep(I, options, 'segMap', segMap);
+        % NOTE: ~segMap to take the features from black parts
+        [feature, featVis] = computeFeatureRep(I, options, 'segMap', ~segMap);
     catch
         [feature, featVis] = computeFeatureRep(I, options);
     end

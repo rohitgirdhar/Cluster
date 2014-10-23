@@ -1,4 +1,5 @@
 function [hist, vis] = getDSIFTHist(I, options, varargin)
+% consider only 1s part from segMap to compute the histogram
 p = inputParser;
 addOptional(p, 'segMap', ones(size(I, 1), size(I, 2)));
 parse(p, varargin{:});
