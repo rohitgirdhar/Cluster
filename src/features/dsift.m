@@ -1,5 +1,7 @@
 function feature = dsift(I)
 % conver to lab
+% takes only RGB images as input
+
 origSize = size(I);
 I = padarray(I, [2 2], 'pre');
 I = padarray(I, [1 1], 'post');

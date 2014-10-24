@@ -4,6 +4,11 @@ p = inputParser;
 addOptional(p, 'segMap', ones(size(I, 1), size(I, 2)));
 parse(p, varargin{:});
 
+% dsift function can't handle grayscale images, convert to rgb if required
+if size(I, 3) == 1
+    I = cat(3, I, I, I);
+end
+
 load(fullfile(options.cacheDir, ['vocab_model_', ...
             num2str(options.dsiftVocabK), '.mat']), 'model');
 
@@ -19,5 +24,5 @@ vis = reshape(vis_final, size(I, 1), size(I, 2));
 hist = histc(vis(:), 1 : options.dsiftVocabK);
 hist = reshape(hist, 1, []);
 hist = hist ./ norm(hist, 1);
-fprintf('Time to compute visual rep %s\n', toc);
+fprintf('Time to compute visual rep %f\n', toc);
 

@@ -33,6 +33,14 @@ for i = 1 : numel(fullpaths)
     
     [path, fname, ~] = fileparts(frpaths{i});
 
+    features_dpath = fullfile(options.cacheDir, options.featureDir, path);
+    system(['mkdir -p ' features_dpath]);
+    features_fpath = fullfile(features_dpath, [fname, '.mat']);
+    if exist(features_fpath, 'file')
+        fprintf('Already exists for %s\n', features_fpath);
+        continue;
+    end
+
     try
         segMap = imread(fullfile(segDir, path, [fname, options.segExt]));
         % NOTE: ~segMap to take the features from black parts
@@ -40,11 +48,8 @@ for i = 1 : numel(fullpaths)
     catch
         [feature, featVis] = computeFeatureRep(I, options);
     end
+    save(features_fpath, 'feature');
 
-    features_dpath = fullfile(options.cacheDir, options.featureDir, ...
-            path);
-    system(['mkdir -p ' features_dpath]);
-    save(fullfile(features_dpath, [fname, '.mat']), 'feature');
     if options.dumpFeatureVis == 1
         features_vis_dpath = strrep(features_dpath, options.cacheDir, options.resultsDir);
         out_dir = fullfile(features_vis_dpath, 'Vis/');
