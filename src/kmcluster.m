@@ -26,11 +26,14 @@ fprintf('Read all features (%d)\n', size(all_features, 1));
 %[C, A] = vl_kmeans(all_features', options.K, 'Verbose', 'Algorithm', 'ANN');
 [A, C] = kmeans(all_features, options.K);
 system(['mkdir -p ' options.resultsDir]);
-save(fullfile(options.resultsDir, ['kmeans_' num2str(options.K) '.mat']), 'C', 'A');
+save(fullfile(options.resultsDir, ['kmeans_' ...
+            options.clusterFeature '_' num2str(options.K) '.mat']), 'C', 'A');
 
-fid = fopen(fullfile(options.resultsDir, ['kmeans_' num2str(options.K) '.txt']), 'w');
+fid = fopen(fullfile(options.resultsDir, ['kmeans_' ...
+            options.clusterFeature '_' num2str(options.K) '.txt']), 'w');
 for cls = unique(A(:))'
     selected = frpaths(A == cls);
     fprintf(fid, '%s\n', strjoin(selected', ' '));
 end
 fclose(fid);
+
