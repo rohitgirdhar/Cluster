@@ -88,5 +88,5 @@ model.vocab = vl_kmeans(double(all_features'), ...
                         min(size(all_features, 1), params.numWords), 'verbose', ...
                         'algorithm', 'ANN');
 model.kdtree = vl_kdtreebuild(model.vocab);
-save(['model_' num2str(params.numWords) '.mat'], 'model');
+save(fullfile(options.cacheDir, ['vocab_model_' num2str(params.numWords) '.mat']), 'model');
 
