@@ -1,8 +1,10 @@
 function [C, A] = kmcluster(options)
 
 imgsDir = options.dataset;
-segImgsPath = options.segImgsDir;
-imgsListFpath = options.imgsList;
+imgsListFpath = '';
+if isfield(options, 'imgsList')
+    imgsListFpath = options.imgsList;
+end
 
 %% Get imgs list
 if isempty(imgsListFpath) || ~exist(imgsListFpath, 'file')
@@ -18,7 +20,11 @@ all_features = [];
 for i = 1 : numel(frpaths)
     [path, fname, ~] = fileparts(frpaths{i});
     features_dpath = fullfile(options.cacheDir, options.featureDir, path);
-    load(fullfile(features_dpath, [fname, '.mat']), 'feature');
+    if strcmp(options.featureExt, '.mat')
+        load(fullfile(features_dpath, [fname, '.mat']), 'feature');
+    elseif strcmp(options.featureExt, '.txt')
+        feature = readTxt(fullfile(features_dpath, [fname, '.txt']));
+    end
     all_features = [all_features; feature];
 end
 fprintf('Read all features (%d)\n', size(all_features, 1));
@@ -36,4 +42,11 @@ for cls = unique(A(:))'
     fprintf(fid, '%s\n', strjoin(selected', ' '));
 end
 fclose(fid);
+
+function feature = readTxt(fpath)
+fid = fopen(fpath);
+feature = textscan(fid, '%f\n');
+fclose(fid);
+feature = feature{1};
+feature = feature(:)';
 
