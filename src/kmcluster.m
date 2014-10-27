@@ -29,16 +29,31 @@ for i = 1 : numel(frpaths)
 end
 fprintf('Read all features (%d)\n', size(all_features, 1));
 
-%[C, A] = vl_kmeans(all_features', options.K, 'Verbose', 'Algorithm', 'ANN');
-[A, C] = kmeans(all_features, options.K);
+
 system(['mkdir -p ' options.resultsDir]);
-save(fullfile(options.resultsDir, ['kmeans_' ...
-            options.clusterFeature '_' num2str(options.K) '.mat']), 'C', 'A');
+kmeans_cache_file = fullfile(options.resultsDir, ['kmeans_' ...
+            options.clusterFeature '_' num2str(options.K) '.mat']);
+if ~exist(kmeans_cache_file, 'file')
+%    [C, A] = vl_kmeans(all_features', options.K, 'Verbose', 'Algorithm', 'ANN');
+    [A, C, ~, D] = kmeans(all_features, options.K);
+    save(kmeans_cache_file, 'C', 'A', 'D');
+else 
+    load(kmeans_cache_file, 'C', 'A', 'D');
+end
+D = cat(1, D, inf(size(A, 1) - size(D, 1), options.K));
 
 fid = fopen(fullfile(options.resultsDir, ['kmeans_' ...
             options.clusterFeature '_' num2str(options.K) '.txt']), 'w');
-for cls = unique(A(:))'
-    selected = frpaths(A == cls);
+for cls = 1 : options.K
+    mask = A == cls;
+    selected = [];
+    if ~all(mask == 0) % if at least one element got assigned this label
+        selected = frpaths(mask);
+        cls
+        selected_D = D(mask, cls);
+        [~, order] = sort(selected_D);
+        selected = selected(order);
+    end
     fprintf(fid, '%s\n', strjoin(selected', ' '));
 end
 fclose(fid);
